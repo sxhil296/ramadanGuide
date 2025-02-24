@@ -59,46 +59,57 @@ export default function Chat() {
                 </span>
 
                 <div
-                  className={`max-w-xl break-words p-4 ${
+                  className={`max-w-xl break-words p-2 sm:p-4 ${
                     message.role === "user"
                       ? "bg-violet-600 text-white rounded-t-2xl rounded-l-2xl"
                       : "bg-white text-black rounded-b-2xl rounded-r-2xl shadow-md"
                   }`}
                 >
                   <div className="prose prose-sm max-w-none">
-                  <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      components={{
-        code: ({
-          inline,
-          children,
-          ...props
-        }: {
-          inline?: boolean;
-          children?: ReactNode;
-        }) => {
-          const bgColor =
-            message.role === "user" ? "bg-violet-500" : "bg-gray-100";
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        code: ({
+                          inline,
+                          children,
+                          ...props
+                        }: {
+                          inline?: boolean;
+                          children?: ReactNode;
+                        }) => {
+                          const bgColor =
+                            message.role === "user"
+                              ? "bg-violet-500"
+                              : "bg-gray-100";
 
-          return inline ? (
-            <code {...props} className={`px-1 rounded ${bgColor}`}>
-              {children}
-            </code>
-          ) : (
-            <pre className={bgColor}>
-              <code {...props} className="block p-2 rounded">
-                {children}
-              </code>
-            </pre>
-          );
-        },
-        p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
-        ul: ({ children }) => <ul className="list-disc ml-4 mb-1">{children}</ul>,
-        ol: ({ children }) => <ol className="list-decimal ml-4 mb-1">{children}</ol>,
-      }}
-    >
-      {message.content}
-    </ReactMarkdown>
+                          return inline ? (
+                            <code
+                              {...props}
+                              className={`px-1 rounded ${bgColor}`}
+                            >
+                              {children}
+                            </code>
+                          ) : (
+                            <pre className={bgColor}>
+                              <code {...props} className="block p-2 rounded">
+                                {children}
+                              </code>
+                            </pre>
+                          );
+                        },
+                        p: ({ children }) => (
+                          <p className="mb-1 last:mb-0">{children}</p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="list-disc ml-4 mb-1">{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="list-decimal ml-4 mb-1">{children}</ol>
+                        ),
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
                   </div>
                 </div>
               </div>
@@ -120,18 +131,18 @@ export default function Chat() {
           <div ref={msgRef}></div>
         </ScrollArea>
       </CardContent>
-      <CardFooter className="p-3 sm:p-6 border-t ">
+      <CardFooter className="p-2 sm:p-6 border-t ">
         <form onSubmit={handleSubmit} className="w-full relative">
           <Input
             value={input}
             onChange={handleInputChange}
-            className="w-full h-full resize-none rounded-full border border-slate-900/10 bg-white pl-6 pr-24 py-[25px] text-base font-medium placeholder:text-slate-400 focus:border-violet-500 focus:outline-none focus:ring-4 focus:ring-violet-500/10 shadow-[0_10px_40px_0px_rgba(0,0,0,0.15)]"
+            className="w-full h-full resize-none rounded-full border border-slate-900/10 bg-white pl-3 sm:pl-6 pr-12 sm:pr-24 py-[15px] sm:py-[25px] text-base font-medium placeholder:text-slate-400 focus:border-violet-500 focus:outline-none focus:ring-4 focus:ring-violet-500/10 shadow-[0_10px_40px_0px_rgba(0,0,0,0.15)]"
             required
             placeholder="Type your message here..."
           />
           <Button
             type="submit"
-            className="flex w-14 h-14 items-center justify-center rounded-full px-3 text-sm  bg-violet-600 font-semibold text-white hover:bg-violet-700 active:bg-violet-800 absolute right-2 bottom-2 disabled:bg-violet-100 disabled:text-violet-400"
+            className="flex w-8 sm:w-14 h-8 sm:h-14 items-center justify-center rounded-full px-3 text-sm  bg-violet-600 font-semibold text-white hover:bg-violet-700 active:bg-violet-800 absolute right-2 bottom-2 disabled:bg-violet-100 disabled:text-violet-400"
             disabled={isLoading}
             size={"icon"}
           >
