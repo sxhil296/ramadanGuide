@@ -1,6 +1,15 @@
+"use client";
 import Chat from "@/components/chat";
+import WarningPopup from "@/components/warningPopup";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [showWarning, setShowWarning] = useState(false);
+
+  useEffect(() => {
+    setShowWarning(true);
+  }, []);
+
   return (
     <main className="h-screen bg-white p-4 flex flex-col">
       <div className="flex flex-col gap-4 w-full items-center flex-grow max-h-full">
@@ -9,6 +18,10 @@ export default function Home() {
         </h1>
         <Chat />
       </div>
+      <WarningPopup
+        isVisible={showWarning}
+        onClose={() => setShowWarning(false)}
+      />
     </main>
   );
 }
