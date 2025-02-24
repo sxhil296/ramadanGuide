@@ -5,7 +5,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Send } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import LoadingDots from "./loadingDots";
@@ -66,49 +66,39 @@ export default function Chat() {
                   }`}
                 >
                   <div className="prose prose-sm max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        code: ({
-                          inline,
-                          children,
-                          ...props
-                        }: {
-                          inline?: boolean;
-                          children: React.ReactNode;
-                        }) => {
-                          const bgColor =
-                            message.role === "user"
-                              ? "bg-violet-500"
-                              : "bg-gray-100";
-                          return inline ? (
-                            <code
-                              {...props}
-                              className={`px-1 rounded ${bgColor}`}
-                            >
-                              {children}
-                            </code>
-                          ) : (
-                            <pre className={bgColor}>
-                              <code {...props} className="block p-2 rounded">
-                                {children}
-                              </code>
-                            </pre>
-                          );
-                        },
-                        p: ({ children }) => (
-                          <p className="mb-1 last:mb-0">{children}</p>
-                        ),
-                        ul: ({ children }) => (
-                          <ul className="list-disc ml-4 mb-1">{children}</ul>
-                        ),
-                        ol: ({ children }) => (
-                          <ol className="list-decimal ml-4 mb-1">{children}</ol>
-                        ),
-                      }}
-                    >
-                      {message.content}
-                    </ReactMarkdown>
+                  <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        code: ({
+          inline,
+          children,
+          ...props
+        }: {
+          inline?: boolean;
+          children?: ReactNode;
+        }) => {
+          const bgColor =
+            message.role === "user" ? "bg-violet-500" : "bg-gray-100";
+
+          return inline ? (
+            <code {...props} className={`px-1 rounded ${bgColor}`}>
+              {children}
+            </code>
+          ) : (
+            <pre className={bgColor}>
+              <code {...props} className="block p-2 rounded">
+                {children}
+              </code>
+            </pre>
+          );
+        },
+        p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+        ul: ({ children }) => <ul className="list-disc ml-4 mb-1">{children}</ul>,
+        ol: ({ children }) => <ol className="list-decimal ml-4 mb-1">{children}</ol>,
+      }}
+    >
+      {message.content}
+    </ReactMarkdown>
                   </div>
                 </div>
               </div>
