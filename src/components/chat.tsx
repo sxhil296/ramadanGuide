@@ -32,15 +32,36 @@ export default function Chat() {
     ],
   });
   const msgRef = useRef<HTMLDivElement>(null);
-  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [screenHeight, setScreenHeight] = useState(0);
 
   useEffect(() => {
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
       setScreenHeight(window.innerHeight);
-    };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+      const handleResize = () => {
+        setScreenHeight(window.innerHeight);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleFocus = () => {
+        setTimeout(() => {
+          inputRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }, 300);
+      };
+
+      inputRef.current?.addEventListener("focus", handleFocus);
+      return () => inputRef.current?.removeEventListener("focus", handleFocus);
+    }
   }, []);
 
   useEffect(() => {
@@ -52,7 +73,7 @@ export default function Chat() {
   return (
     <Card
       className="rounded-2xl border-purple-700 border-opacity-5 border lg:w-3/4 flex-grow flex flex-col bg-[url('/bg.png')] bg-cover  overflow-hidden"
-      style={{ height: `${screenHeight}px` }}
+      style={{ height: screenHeight ? `${screenHeight}px` : "100dvh" }}
     >
       <CardContent className="p-0 flex-1 overflow-hidden">
         <ScrollArea className="flex flex-col gap-5 p-3 sm:p-8 h-full">
@@ -148,6 +169,7 @@ export default function Chat() {
       <CardFooter className="p-2 sm:p-6 border-t ">
         <form onSubmit={handleSubmit} className="w-full relative">
           <Input
+            ref={inputRef}
             value={input}
             onChange={handleInputChange}
             className="w-full h-full resize-none rounded-full border border-slate-900/10 bg-white pl-3 sm:pl-6 pr-12 sm:pr-24 py-[15px] sm:py-[25px] text-base font-medium placeholder:text-slate-400 focus:border-violet-500 focus:outline-none focus:ring-4 focus:ring-violet-500/10 shadow-[0_10px_40px_0px_rgba(0,0,0,0.15)]"
