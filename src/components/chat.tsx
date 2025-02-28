@@ -5,7 +5,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Send } from "lucide-react";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import LoadingDots from "./loadingDots";
@@ -32,14 +32,28 @@ export default function Chat() {
     ],
   });
   const msgRef = useRef<HTMLDivElement>(null);
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenHeight(window.innerHeight);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (msgRef.current) {
       msgRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+  console.log("error>>>>>>", error);
   return (
-    <Card className="rounded-2xl border-purple-700 border-opacity-5 border lg:w-3/4 flex-grow flex flex-col bg-[url('/bg.png')] bg-cover h-[calc(100vh-2rem)] overflow-hidden">
+    <Card
+      className="rounded-2xl border-purple-700 border-opacity-5 border lg:w-3/4 flex-grow flex flex-col bg-[url('/bg.png')] bg-cover  overflow-hidden"
+      style={{ height: `${screenHeight}px` }}
+    >
       <CardContent className="p-0 flex-1 overflow-hidden">
         <ScrollArea className="flex flex-col gap-5 p-3 sm:p-8 h-full">
           {messages?.map((message, index) => (
